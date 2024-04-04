@@ -168,7 +168,7 @@ interface Table_public_persons {
 }
 interface Table_public_players {
   player_id: number;
-  user_id: string | null;
+  user_id: string;
   weight: number | null;
   height: number | null;
   team_id: number | null;
@@ -274,7 +274,7 @@ interface Table_public_tasks {
 interface Table_public_teams {
   id: number;
   created_at: string;
-  coach_id: string | null;
+  coach_id: string;
   organization_id: number | null;
   city: string | null;
   country: string | null;
