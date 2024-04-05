@@ -12,6 +12,7 @@ const supabase = createClient(
 
 function App() {
     const [session, setSession] = useState(null);
+    const [user, setUser] = useState(null);
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
             setSession(session);
@@ -30,6 +31,25 @@ function App() {
             console.log("error");
         }
     };
+    const [code, setCode] = useState("");
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        supabase.auth.getUser().then(({ data: { user } }) => {
+            setUser(user);
+            console.log(user);
+            supabase
+                .rpc("join_team", { code: code, user_id: user.id })
+                .then(({ data, error }) => {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log(data);
+                    }
+                });
+        });
+
+        //const {data, error} = await supabase.rpc('join_team', {team_code: code, user_id: supabase.auth.retreiveUser("JWT")})
+    };
 
     if (!session) {
         return (
@@ -41,7 +61,17 @@ function App() {
                 {" "}
                 Logged in!
                 <button onClick={handleLogout}>Log out</button>
-                <div>Join team</div>
+                <div>
+                    <form onSubmit={handleSubmit}>
+                        <label htmlFor="textInput">Enter team code:</label>
+                        <input
+                            type="text"
+                            id="textInput"
+                            onChange={(event) => setCode(event.target.value)}
+                        />
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
             </div>
         );
     }

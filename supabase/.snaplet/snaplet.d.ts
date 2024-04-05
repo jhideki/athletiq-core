@@ -271,6 +271,10 @@ interface Table_public_tasks {
   team_id: number | null;
   details: Json | null;
 }
+interface Table_private_team_codes {
+  team_id: number;
+  code: string | null;
+}
 interface Table_public_teams {
   id: number;
   created_at: string;
@@ -357,6 +361,9 @@ interface Schema_pgsodium {
 interface Schema_pgsodium_masks {
 
 }
+interface Schema_private {
+  team_codes: Table_private_team_codes;
+}
 interface Schema_public {
   exercises: Table_public_exercises;
   organizations: Table_public_organizations;
@@ -396,6 +403,7 @@ interface Database {
   net: Schema_net;
   pgsodium: Schema_pgsodium;
   pgsodium_masks: Schema_pgsodium_masks;
+  private: Schema_private;
   public: Schema_public;
   realtime: Schema_realtime;
   storage: Schema_storage;
@@ -593,12 +601,21 @@ interface Tables_relationships {
        public_program_tasks_task_id_fkey: "public.program_tasks";
     };
   };
+  "private.team_codes": {
+    parent: {
+       private_team_codes_team_id_fkey: "public.teams";
+    };
+    children: {
+
+    };
+  };
   "public.teams": {
     parent: {
        public_teams_coach_id_fkey: "auth.users";
        public_teams_organization_id_fkey: "public.organizations";
     };
     children: {
+       private_team_codes_team_id_fkey: "private.team_codes";
        public_exercises_team_id_fkey: "public.exercises";
        public_players_team_id_fkey: "public.players";
        public_programs_team_id_fkey: "public.programs";

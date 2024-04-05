@@ -408,6 +408,14 @@ type Override = {
       program_tasks?: string;
     };
   }
+  team_codes?: {
+    name?: string;
+    fields?: {
+      team_id?: string;
+      code?: string;
+      teams?: string;
+    };
+  }
   teams?: {
     name?: string;
     fields?: {
@@ -419,6 +427,7 @@ type Override = {
       country?: string;
       users?: string;
       organizations?: string;
+      team_codes?: string;
       exercises?: string;
       players?: string;
       programs?: string;
@@ -678,12 +687,17 @@ export interface Fingerprint {
     team?: FingerprintRelationField;
     programTasks?: FingerprintRelationField;
   }
+  teamCodes?: {
+    teamId?: FingerprintNumberField;
+    team?: FingerprintRelationField;
+  }
   teams?: {
     id?: FingerprintNumberField;
     createdAt?: FingerprintDateField;
     organizationId?: FingerprintNumberField;
     coach?: FingerprintRelationField;
     organization?: FingerprintRelationField;
+    teamCodes?: FingerprintRelationField;
     exercises?: FingerprintRelationField;
     players?: FingerprintRelationField;
     programs?: FingerprintRelationField;

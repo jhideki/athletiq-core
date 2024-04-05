@@ -22,10 +22,6 @@ await seed.$resetDatabase()
 
 // This will create 3 records in the HttpResponses table
 // it reads HttpResponses times(x) 3
-await seed.users(x => x(10))
-await seed.persons(x => x(10))
-await seed.teams(x => x(10))
-await seed.players(x => x(10))
 await seed.teamCodes(x => x(10))
 
 // Run it with: DRY=0 npx tsx seed.mts
