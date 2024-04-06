@@ -9,6 +9,7 @@ type Enum_auth_factor_type = 'totp' | 'webauthn';
 type Enum_net_request_status = 'ERROR' | 'PENDING' | 'SUCCESS';
 type Enum_pgsodium_key_status = 'default' | 'expired' | 'invalid' | 'valid';
 type Enum_pgsodium_key_type = 'aead-det' | 'aead-ietf' | 'auth' | 'generichash' | 'hmacsha256' | 'hmacsha512' | 'kdf' | 'secretbox' | 'secretstream' | 'shorthash' | 'stream_xchacha20';
+type Enum_public_user_type = 'coach' | 'manager' | 'player';
 interface Table_net_http_response {
   id: number | null;
   status_code: number | null;
@@ -42,7 +43,7 @@ interface Table_public_exercises {
   id: number;
   created_at: string;
   name: string | null;
-  team_id: number | null;
+  team_id: number;
   details: Json | null;
   description: string | null;
 }
@@ -165,6 +166,7 @@ interface Table_public_persons {
   age: number | null;
   first_name: string;
   last_name: string;
+  user_type: Enum_public_user_type | null;
 }
 interface Table_public_players {
   player_id: number;
@@ -181,7 +183,7 @@ interface Table_public_programs {
   id: number;
   start_date: string;
   end_date: string | null;
-  team_id: number | null;
+  team_id: number;
   details: Json | null;
 }
 interface Table_auth_refresh_tokens {
@@ -268,7 +270,7 @@ interface Table_public_tasks {
   id: number;
   created_at: string;
   title: string | null;
-  team_id: number | null;
+  team_id: number;
   details: Json | null;
 }
 interface Table_private_team_codes {
@@ -431,7 +433,7 @@ interface Tables_relationships {
        public_exercises_team_id_fkey: "public.teams";
     };
     children: {
-
+       public_task_exercises_exercise_id_fkey: "public.task_exercises";
     };
   };
   "auth.flow_state": {
@@ -593,12 +595,22 @@ interface Tables_relationships {
        sso_domains_sso_provider_id_fkey: "auth.sso_domains";
     };
   };
+  "public.task_exercises": {
+    parent: {
+       public_task_exercises_exercise_id_fkey: "public.exercises";
+       public_task_exercises_task_id_fkey: "public.tasks";
+    };
+    children: {
+
+    };
+  };
   "public.tasks": {
     parent: {
        public_tasks_team_id_fkey: "public.teams";
     };
     children: {
        public_program_tasks_task_id_fkey: "public.program_tasks";
+       public_task_exercises_task_id_fkey: "public.task_exercises";
     };
   };
   "private.team_codes": {

@@ -1,4 +1,6 @@
 import { createSeedClient } from '@snaplet/seed';
+import { createClient } from "@supabase/supabase-js";
+
 
 // You can use @snaplet/copycat to generate fake data for a field, for example:
 // ```
@@ -16,16 +18,76 @@ const seed = await createSeedClient({
     dryRun: process.env.DRY !== '0',
 });
 
-// Clears all existing data in the database, but keep the structure
+const teamID = 120934405987
+const supabase = createClient(
+    "http://127.0.0.1:54321",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU",
+);
+
 await seed.$resetDatabase()
+async function registerCoach() {
+    const { data, error } = await supabase.auth.signUp({
+        email: 'testcoach@email.com',
+        password: 'test1234',
+    })
+    await seed.persons([{
+        id: data.user?.id,
+        userType: 'coach',
+    }])
 
+    await seed.teams([{
+        coachId: data.user?.id,
+        id: teamID,
+    }])
+    await supabase.auth.signOut()
+}
 
-// This will create 3 records in the HttpResponses table
-// it reads HttpResponses times(x) 3
+async function registerPlayer() {
+
+    const { data, error } = await supabase.auth.signUp({
+        email: 'testPlayer@email.com',
+        password: 'test1234',
+    })
+    await seed.persons([{
+        id: data.user?.id,
+        userType: 'player',
+    }])
+    await seed.players([{
+        teamId: teamID,
+        userId: data.user?.id,
+    }])
+
+    await supabase.auth.signOut()
+}
+async function registerUser() {
+    const { data, error } = await supabase.auth.signUp({
+        email: 'testuser@email.com',
+        password: 'test1234',
+    })
+
+    await seed.persons([{
+        id: data.user?.id,
+        userType: null,
+    }])
+
+    await supabase.auth.signOut()
+}
+
+//generate test users
+await registerCoach();
+await registerPlayer();
+await registerUser();
+//generic data
 await seed.users(x => x(10))
 await seed.persons(x => x(10))
 await seed.teams(x => x(10))
 await seed.players(x => x(10))
 await seed.teamCodes(x => x(10))
+await seed.exercises(x => x(10))
+await seed.tasks(x => x(10))
+await seed.programs(x => x(10))
+await seed.taskExercises(x => x(10))
+await seed.programTasks(x => x(10))
+
 
 // Run it with: DRY=0 npx tsx seed.mts

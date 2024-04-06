@@ -63,6 +63,7 @@ type Override = {
       details?: string;
       description?: string;
       teams?: string;
+      task_exercises?: string;
     };
   }
   flow_state?: {
@@ -238,6 +239,7 @@ type Override = {
       age?: string;
       first_name?: string;
       last_name?: string;
+      user_type?: string;
       users?: string;
     };
   }
@@ -394,6 +396,8 @@ type Override = {
     fields?: {
       task_id?: string;
       exercise_id?: string;
+      exercises?: string;
+      tasks?: string;
     };
   }
   tasks?: {
@@ -406,6 +410,7 @@ type Override = {
       details?: string;
       teams?: string;
       program_tasks?: string;
+      task_exercises?: string;
     };
   }
   team_codes?: {
@@ -525,6 +530,7 @@ export interface Fingerprint {
     teamId?: FingerprintNumberField;
     details?: FingerprintJsonField;
     team?: FingerprintRelationField;
+    taskExercises?: FingerprintRelationField;
   }
   flowStates?: {
     createdAt?: FingerprintDateField;
@@ -678,6 +684,8 @@ export interface Fingerprint {
   taskExercises?: {
     taskId?: FingerprintNumberField;
     exerciseId?: FingerprintNumberField;
+    exercise?: FingerprintRelationField;
+    task?: FingerprintRelationField;
   }
   tasks?: {
     id?: FingerprintNumberField;
@@ -686,6 +694,7 @@ export interface Fingerprint {
     details?: FingerprintJsonField;
     team?: FingerprintRelationField;
     programTasks?: FingerprintRelationField;
+    taskExercises?: FingerprintRelationField;
   }
   teamCodes?: {
     teamId?: FingerprintNumberField;
