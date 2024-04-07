@@ -284,6 +284,7 @@ interface Table_public_teams {
   organization_id: number | null;
   city: string | null;
   country: string | null;
+  name: string;
 }
 interface Table_auth_users {
   instance_id: string | null;

@@ -430,6 +430,7 @@ type Override = {
       organization_id?: string;
       city?: string;
       country?: string;
+      name?: string;
       users?: string;
       organizations?: string;
       team_codes?: string;
