@@ -169,11 +169,11 @@ interface Table_public_persons {
   user_type: Enum_public_user_type | null;
 }
 interface Table_public_players {
-  player_id: number;
   user_id: string;
   weight: number | null;
   height: number | null;
   team_id: number | null;
+  id: number;
 }
 interface Table_public_program_tasks {
   program_id: number;
@@ -265,6 +265,7 @@ interface Table_auth_sso_providers {
 interface Table_public_task_exercises {
   task_id: number;
   exercise_id: number;
+  team_id: number;
 }
 interface Table_public_tasks {
   id: number;
@@ -600,6 +601,7 @@ interface Tables_relationships {
     parent: {
        public_task_exercises_exercise_id_fkey: "public.exercises";
        public_task_exercises_task_id_fkey: "public.tasks";
+       public_task_exercises_team_id_fkey: "public.teams";
     };
     children: {
 
@@ -632,6 +634,7 @@ interface Tables_relationships {
        public_exercises_team_id_fkey: "public.exercises";
        public_players_team_id_fkey: "public.players";
        public_programs_team_id_fkey: "public.programs";
+       public_task_exercises_team_id_fkey: "public.task_exercises";
        public_tasks_team_id_fkey: "public.tasks";
     };
   };

@@ -25,6 +25,7 @@ const supabase = createClient(
 );
 
 await seed.$resetDatabase()
+
 async function registerCoach() {
     const { data, error } = await supabase.auth.signUp({
         email: 'testcoach@email.com',

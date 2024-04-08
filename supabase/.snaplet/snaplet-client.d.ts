@@ -246,11 +246,11 @@ type Override = {
   players?: {
     name?: string;
     fields?: {
-      player_id?: string;
       user_id?: string;
       weight?: string;
       height?: string;
       team_id?: string;
+      id?: string;
       users?: string;
       teams?: string;
     };
@@ -396,8 +396,10 @@ type Override = {
     fields?: {
       task_id?: string;
       exercise_id?: string;
+      team_id?: string;
       exercises?: string;
       tasks?: string;
+      teams?: string;
     };
   }
   tasks?: {
@@ -437,6 +439,7 @@ type Override = {
       exercises?: string;
       players?: string;
       programs?: string;
+      task_exercises?: string;
       tasks?: string;
     };
   }
@@ -610,10 +613,10 @@ export interface Fingerprint {
     i?: FingerprintRelationField;
   }
   players?: {
-    playerId?: FingerprintNumberField;
     weight?: FingerprintNumberField;
     height?: FingerprintNumberField;
     teamId?: FingerprintNumberField;
+    id?: FingerprintNumberField;
     user?: FingerprintRelationField;
     team?: FingerprintRelationField;
   }
@@ -685,8 +688,10 @@ export interface Fingerprint {
   taskExercises?: {
     taskId?: FingerprintNumberField;
     exerciseId?: FingerprintNumberField;
+    teamId?: FingerprintNumberField;
     exercise?: FingerprintRelationField;
     task?: FingerprintRelationField;
+    team?: FingerprintRelationField;
   }
   tasks?: {
     id?: FingerprintNumberField;
@@ -711,6 +716,7 @@ export interface Fingerprint {
     exercises?: FingerprintRelationField;
     players?: FingerprintRelationField;
     programs?: FingerprintRelationField;
+    taskExercises?: FingerprintRelationField;
     tasks?: FingerprintRelationField;
   }
   users?: {

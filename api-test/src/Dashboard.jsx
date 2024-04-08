@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
+import TeamMembersList from './TeamMembers'
+import Task from './Task'
 
 export default function Dashboard({ session }) {
     const [loading, setLoading] = useState(true)
@@ -28,16 +30,18 @@ export default function Dashboard({ session }) {
                     setFirstName(data.first_name)
                     setLastName(data.last_name)
                     setUserType(data.user_type)
+
+                    if (data.user_type == 'coach') {
+                        await getTeam(user)
+                    }
                 }
             }
 
             setLoading(false)
         }
 
-        async function getTeam() {
-            setLoading(true)
-            const { user } = session
-            const { data, error } = await supabase.from('teams').select('name', 'id', 'city', 'country').eq('coach_id', user.id).single();
+        async function getTeam(user) {
+            const { data, error } = await supabase.from('teams').select('name, id').eq('coach_id', user.id).single();
             if (!ignore) {
                 if (error) {
                     console.log("error retreiving record")
@@ -45,17 +49,12 @@ export default function Dashboard({ session }) {
                 } else if (data) {
                     setTeam(data.name)
                     setTeamID(data.id)
+                    console.log(data)
                 }
             }
-
-            setLoading(false)
         }
 
         getProfile()
-        if (userType == 'coach') {
-            getTeam()
-        }
-        getTeam()
 
         return () => {
             ignore = true
@@ -134,7 +133,12 @@ export default function Dashboard({ session }) {
                 </div>
             </form>
             <div>
-                <h2>{team}</h2>
+                {loading ? (<div>Loading team data... </div>) :
+                    (<div>
+                        <h2>Team name: {team}</h2>
+                        {teamID && <TeamMembersList session={session} teamID={teamID} />}
+                        {teamID && <Task session={session} teamID={teamID} />}
+                    </div>)}
             </div>
         </div>
     )
