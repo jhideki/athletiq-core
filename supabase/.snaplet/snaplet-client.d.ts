@@ -253,6 +253,8 @@ type Override = {
       id?: string;
       users?: string;
       teams?: string;
+      scheduled_tasks?: string;
+      task_players?: string;
     };
   }
   program_tasks?: {
@@ -319,6 +321,18 @@ type Override = {
       flow_state_id?: string;
       flow_state?: string;
       sso_providers?: string;
+    };
+  }
+  scheduled_tasks?: {
+    name?: string;
+    fields?: {
+      task_id?: string;
+      scheduled_date?: string;
+      player_id?: string;
+      team_id?: string;
+      players?: string;
+      tasks?: string;
+      teams?: string;
     };
   }
   auth_schema_migrations?: {
@@ -402,6 +416,21 @@ type Override = {
       teams?: string;
     };
   }
+  task_players?: {
+    name?: string;
+    fields?: {
+      id?: string;
+      created_at?: string;
+      player_id?: string;
+      task_id?: string;
+      team_id?: string;
+      completed?: string;
+      completed_at?: string;
+      players?: string;
+      tasks?: string;
+      teams?: string;
+    };
+  }
   tasks?: {
     name?: string;
     fields?: {
@@ -412,7 +441,9 @@ type Override = {
       details?: string;
       teams?: string;
       program_tasks?: string;
+      scheduled_tasks?: string;
       task_exercises?: string;
+      task_players?: string;
     };
   }
   team_codes?: {
@@ -439,7 +470,9 @@ type Override = {
       exercises?: string;
       players?: string;
       programs?: string;
+      scheduled_tasks?: string;
       task_exercises?: string;
+      task_players?: string;
       tasks?: string;
     };
   }
@@ -619,6 +652,8 @@ export interface Fingerprint {
     id?: FingerprintNumberField;
     user?: FingerprintRelationField;
     team?: FingerprintRelationField;
+    scheduledTasks?: FingerprintRelationField;
+    taskPlayers?: FingerprintRelationField;
   }
   programTasks?: {
     programId?: FingerprintNumberField;
@@ -652,6 +687,15 @@ export interface Fingerprint {
     updatedAt?: FingerprintDateField;
     flowState?: FingerprintRelationField;
     ssoProvider?: FingerprintRelationField;
+  }
+  scheduledTasks?: {
+    taskId?: FingerprintNumberField;
+    scheduledDate?: FingerprintDateField;
+    playerId?: FingerprintNumberField;
+    teamId?: FingerprintNumberField;
+    player?: FingerprintRelationField;
+    task?: FingerprintRelationField;
+    team?: FingerprintRelationField;
   }
   authSchemaMigrations?: {
 
@@ -693,6 +737,17 @@ export interface Fingerprint {
     task?: FingerprintRelationField;
     team?: FingerprintRelationField;
   }
+  taskPlayers?: {
+    id?: FingerprintNumberField;
+    createdAt?: FingerprintDateField;
+    playerId?: FingerprintNumberField;
+    taskId?: FingerprintNumberField;
+    teamId?: FingerprintNumberField;
+    completedAt?: FingerprintDateField;
+    player?: FingerprintRelationField;
+    task?: FingerprintRelationField;
+    team?: FingerprintRelationField;
+  }
   tasks?: {
     id?: FingerprintNumberField;
     createdAt?: FingerprintDateField;
@@ -700,7 +755,9 @@ export interface Fingerprint {
     details?: FingerprintJsonField;
     team?: FingerprintRelationField;
     programTasks?: FingerprintRelationField;
+    scheduledTasks?: FingerprintRelationField;
     taskExercises?: FingerprintRelationField;
+    taskPlayers?: FingerprintRelationField;
   }
   teamCodes?: {
     teamId?: FingerprintNumberField;
@@ -716,7 +773,9 @@ export interface Fingerprint {
     exercises?: FingerprintRelationField;
     players?: FingerprintRelationField;
     programs?: FingerprintRelationField;
+    scheduledTasks?: FingerprintRelationField;
     taskExercises?: FingerprintRelationField;
+    taskPlayers?: FingerprintRelationField;
     tasks?: FingerprintRelationField;
   }
   users?: {

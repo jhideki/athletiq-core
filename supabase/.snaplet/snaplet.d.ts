@@ -218,6 +218,12 @@ interface Table_auth_saml_relay_states {
   updated_at: string | null;
   flow_state_id: string | null;
 }
+interface Table_public_scheduled_tasks {
+  task_id: number;
+  scheduled_date: string;
+  player_id: number | null;
+  team_id: number | null;
+}
 interface Table_auth_schema_migrations {
   version: string;
 }
@@ -266,6 +272,15 @@ interface Table_public_task_exercises {
   task_id: number;
   exercise_id: number;
   team_id: number;
+}
+interface Table_public_task_players {
+  id: number;
+  created_at: string;
+  player_id: number;
+  task_id: number;
+  team_id: number;
+  completed: boolean | null;
+  completed_at: string | null;
 }
 interface Table_public_tasks {
   id: number;
@@ -375,7 +390,9 @@ interface Schema_public {
   players: Table_public_players;
   program_tasks: Table_public_program_tasks;
   programs: Table_public_programs;
+  scheduled_tasks: Table_public_scheduled_tasks;
   task_exercises: Table_public_task_exercises;
+  task_players: Table_public_task_players;
   tasks: Table_public_tasks;
   teams: Table_public_teams;
 }
@@ -517,7 +534,8 @@ interface Tables_relationships {
        public_players_team_id_fkey: "public.teams";
     };
     children: {
-
+       public_scheduled_tasks_player_id_fkey: "public.scheduled_tasks";
+       public_task_players_player_id_fkey: "public.task_players";
     };
   };
   "public.program_tasks": {
@@ -557,6 +575,16 @@ interface Tables_relationships {
     parent: {
        saml_relay_states_flow_state_id_fkey: "auth.flow_state";
        saml_relay_states_sso_provider_id_fkey: "auth.sso_providers";
+    };
+    children: {
+
+    };
+  };
+  "public.scheduled_tasks": {
+    parent: {
+       public_scheduled_tasks_player_id_fkey: "public.players";
+       public_scheduled_tasks_task_id_fkey: "public.tasks";
+       public_scheduled_tasks_team_id_fkey: "public.teams";
     };
     children: {
 
@@ -607,13 +635,25 @@ interface Tables_relationships {
 
     };
   };
+  "public.task_players": {
+    parent: {
+       public_task_players_player_id_fkey: "public.players";
+       public_task_players_task_id_fkey: "public.tasks";
+       public_task_players_team_id_fkey: "public.teams";
+    };
+    children: {
+
+    };
+  };
   "public.tasks": {
     parent: {
        public_tasks_team_id_fkey: "public.teams";
     };
     children: {
        public_program_tasks_task_id_fkey: "public.program_tasks";
+       public_scheduled_tasks_task_id_fkey: "public.scheduled_tasks";
        public_task_exercises_task_id_fkey: "public.task_exercises";
+       public_task_players_task_id_fkey: "public.task_players";
     };
   };
   "private.team_codes": {
@@ -634,7 +674,9 @@ interface Tables_relationships {
        public_exercises_team_id_fkey: "public.exercises";
        public_players_team_id_fkey: "public.players";
        public_programs_team_id_fkey: "public.programs";
+       public_scheduled_tasks_team_id_fkey: "public.scheduled_tasks";
        public_task_exercises_team_id_fkey: "public.task_exercises";
+       public_task_players_team_id_fkey: "public.task_players";
        public_tasks_team_id_fkey: "public.tasks";
     };
   };
