@@ -4,15 +4,13 @@ alter table "public"."persons" alter column "last_name" set data type text using
 
 set check_function_bodies = off;
 
-CREATE OR REPLACE FUNCTION public.upsert_person(p_age smallint DEFAULT NULL::smallint, p_first_name text DEFAULT NULL::text, p_last_name text DEFAULT NULL::text, p_user_type user_type DEFAULT NULL::user_type)
+CREATE OR REPLACE FUNCTION public.upsert_person(p_id UUID, p_age smallint DEFAULT NULL::smallint, p_first_name text DEFAULT NULL::text, p_last_name text DEFAULT NULL::text, p_user_type user_type DEFAULT NULL::user_type)
  RETURNS void
  LANGUAGE plpgsql
 AS $function$
 declare
-  p_id UUID;
   l_count INTEGER;
 BEGIN
-    p_id = auth.uuid();
     select count(*) into l_count from persons where persons.id=p_id;
     IF l_count != 0 THEN
         -- Update existing record
