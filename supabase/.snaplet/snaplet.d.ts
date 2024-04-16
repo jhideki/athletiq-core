@@ -166,7 +166,6 @@ interface Table_public_persons {
   age: number | null;
   first_name: string;
   last_name: string;
-  user_type: Enum_public_user_type | null;
 }
 interface Table_public_players {
   user_id: string;
@@ -174,6 +173,12 @@ interface Table_public_players {
   height: number | null;
   team_id: number | null;
   id: number;
+}
+interface Table_public_profiles {
+  profile_id: number;
+  person_id: string;
+  user_type: Enum_public_user_type | null;
+  team_id: number | null;
 }
 interface Table_public_program_tasks {
   program_id: number;
@@ -388,6 +393,7 @@ interface Schema_public {
   organizations: Table_public_organizations;
   persons: Table_public_persons;
   players: Table_public_players;
+  profiles: Table_public_profiles;
   program_tasks: Table_public_program_tasks;
   programs: Table_public_programs;
   scheduled_tasks: Table_public_scheduled_tasks;
@@ -538,6 +544,15 @@ interface Tables_relationships {
        public_task_players_player_id_fkey: "public.task_players";
     };
   };
+  "public.profiles": {
+    parent: {
+       public_profiles_person_id_fkey: "auth.users";
+       public_profiles_team_id_fkey: "public.teams";
+    };
+    children: {
+
+    };
+  };
   "public.program_tasks": {
     parent: {
        public_program_tasks_program_id_fkey: "public.programs";
@@ -673,6 +688,7 @@ interface Tables_relationships {
        private_team_codes_team_id_fkey: "private.team_codes";
        public_exercises_team_id_fkey: "public.exercises";
        public_players_team_id_fkey: "public.players";
+       public_profiles_team_id_fkey: "public.profiles";
        public_programs_team_id_fkey: "public.programs";
        public_scheduled_tasks_team_id_fkey: "public.scheduled_tasks";
        public_task_exercises_team_id_fkey: "public.task_exercises";
@@ -690,6 +706,7 @@ interface Tables_relationships {
        sessions_user_id_fkey: "auth.sessions";
        public_persons_id_fkey: "public.persons";
        public_players_user_id_fkey: "public.players";
+       public_profiles_person_id_fkey: "public.profiles";
        public_teams_coach_id_fkey: "public.teams";
     };
   };
