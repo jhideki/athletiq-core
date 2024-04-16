@@ -239,7 +239,6 @@ type Override = {
       age?: string;
       first_name?: string;
       last_name?: string;
-      user_type?: string;
       users?: string;
     };
   }
@@ -255,6 +254,17 @@ type Override = {
       teams?: string;
       scheduled_tasks?: string;
       task_players?: string;
+    };
+  }
+  profiles?: {
+    name?: string;
+    fields?: {
+      profile_id?: string;
+      person_id?: string;
+      user_type?: string;
+      team_id?: string;
+      users?: string;
+      teams?: string;
     };
   }
   program_tasks?: {
@@ -469,6 +479,7 @@ type Override = {
       team_codes?: string;
       exercises?: string;
       players?: string;
+      profiles?: string;
       programs?: string;
       scheduled_tasks?: string;
       task_exercises?: string;
@@ -519,6 +530,7 @@ type Override = {
       sessions?: string;
       persons?: string;
       players?: string;
+      profiles?: string;
       teams?: string;
     };
   }}
@@ -655,6 +667,12 @@ export interface Fingerprint {
     scheduledTasks?: FingerprintRelationField;
     taskPlayers?: FingerprintRelationField;
   }
+  profiles?: {
+    profileId?: FingerprintNumberField;
+    teamId?: FingerprintNumberField;
+    person?: FingerprintRelationField;
+    team?: FingerprintRelationField;
+  }
   programTasks?: {
     programId?: FingerprintNumberField;
     taskId?: FingerprintNumberField;
@@ -772,6 +790,7 @@ export interface Fingerprint {
     teamCodes?: FingerprintRelationField;
     exercises?: FingerprintRelationField;
     players?: FingerprintRelationField;
+    profiles?: FingerprintRelationField;
     programs?: FingerprintRelationField;
     scheduledTasks?: FingerprintRelationField;
     taskExercises?: FingerprintRelationField;
@@ -801,5 +820,6 @@ export interface Fingerprint {
     sessions?: FingerprintRelationField;
     persons?: FingerprintRelationField;
     players?: FingerprintRelationField;
+    profilesByPersonId?: FingerprintRelationField;
     teamsByCoachId?: FingerprintRelationField;
   }}
