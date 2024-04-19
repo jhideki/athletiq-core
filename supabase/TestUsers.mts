@@ -33,7 +33,6 @@ async function registerCoach() {
     })
     await seed.persons([{
         id: data.user?.id,
-        userType: 'coach',
     }])
 
     await seed.teams([{
@@ -50,7 +49,6 @@ async function registerPlayer() {
     })
     await seed.persons([{
         id: data.user?.id,
-        userType: 'player',
     }])
     await seed.players([{
         teamId: teamID,
@@ -73,7 +71,6 @@ async function registerUser() {
 
     await seed.persons([{
         id: data.user?.id,
-        userType: null,
     }])
 
     await supabase.auth.signOut()
