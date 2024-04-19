@@ -1,0 +1,10 @@
+delete from task_exercises;
+delete from exercises;
+delete from program_tasks;
+delete from task_players;
+delete from scheduled_tasks;
+delete from tasks;
+delete from programs;
+delete from players;
+delete from teams;
+delete from persons;
