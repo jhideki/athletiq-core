@@ -171,7 +171,6 @@ interface Table_public_players {
   user_id: string;
   weight: number | null;
   height: number | null;
-  team_id: number | null;
   id: number;
 }
 interface Table_public_profiles {
@@ -563,7 +562,6 @@ interface Tables_relationships {
   "public.players": {
     parent: {
        public_players_user_id_fkey: "auth.users";
-       public_players_team_id_fkey: "public.teams";
     };
     children: {
        public_scheduled_tasks_player_id_fkey: "public.scheduled_tasks";
@@ -730,7 +728,6 @@ interface Tables_relationships {
     children: {
        private_team_codes_team_id_fkey: "private.team_codes";
        public_exercises_team_id_fkey: "public.exercises";
-       public_players_team_id_fkey: "public.players";
        public_profiles_team_id_fkey: "public.profiles";
        public_programs_team_id_fkey: "public.programs";
        public_scheduled_tasks_team_id_fkey: "public.scheduled_tasks";
