@@ -6,6 +6,7 @@ type Enum_auth_aal_level = 'aal1' | 'aal2' | 'aal3';
 type Enum_auth_code_challenge_method = 'plain' | 's256';
 type Enum_auth_factor_status = 'unverified' | 'verified';
 type Enum_auth_factor_type = 'totp' | 'webauthn';
+type Enum_auth_one_time_token_type = 'confirmation_token' | 'email_change_token_current' | 'email_change_token_new' | 'phone_change_token' | 'reauthentication_token' | 'recovery_token';
 type Enum_net_request_status = 'ERROR' | 'PENDING' | 'SUCCESS';
 type Enum_pgsodium_key_status = 'default' | 'expired' | 'invalid' | 'valid';
 type Enum_pgsodium_key_type = 'aead-det' | 'aead-ietf' | 'auth' | 'generichash' | 'hmacsha256' | 'hmacsha512' | 'kdf' | 'secretbox' | 'secretstream' | 'shorthash' | 'stream_xchacha20';
@@ -155,6 +156,15 @@ interface Table_storage_objects {
   version: string | null;
   owner_id: string | null;
 }
+interface Table_auth_one_time_tokens {
+  id: string;
+  user_id: string;
+  token_type: Enum_auth_one_time_token_type;
+  token_hash: string;
+  relates_to: string;
+  created_at: string;
+  updated_at: string;
+}
 interface Table_public_organizations {
   id: number;
   created_at: string;
@@ -172,12 +182,17 @@ interface Table_public_players {
   weight: number | null;
   height: number | null;
   id: number;
+  team_id: number | null;
 }
 interface Table_public_profiles {
   profile_id: number;
   person_id: string;
   user_type: Enum_public_user_type | null;
-  team_id: number | null;
+  city: string | null;
+  country: string | null;
+  first_name: string | null;
+  last_name: string | null;
+  state: string | null;
 }
 interface Table_public_program_tasks {
   program_id: number;
@@ -378,6 +393,7 @@ interface Schema_auth {
   mfa_amr_claims: Table_auth_mfa_amr_claims;
   mfa_challenges: Table_auth_mfa_challenges;
   mfa_factors: Table_auth_mfa_factors;
+  one_time_tokens: Table_auth_one_time_tokens;
   refresh_tokens: Table_auth_refresh_tokens;
   saml_providers: Table_auth_saml_providers;
   saml_relay_states: Table_auth_saml_relay_states;
@@ -543,6 +559,14 @@ interface Tables_relationships {
 
     };
   };
+  "auth.one_time_tokens": {
+    parent: {
+       one_time_tokens_user_id_fkey: "auth.users";
+    };
+    children: {
+
+    };
+  };
   "public.organizations": {
     parent: {
 
@@ -562,6 +586,7 @@ interface Tables_relationships {
   "public.players": {
     parent: {
        public_players_user_id_fkey: "auth.users";
+       public_players_team_id_fkey: "public.teams";
     };
     children: {
        public_scheduled_tasks_player_id_fkey: "public.scheduled_tasks";
@@ -571,7 +596,6 @@ interface Tables_relationships {
   "public.profiles": {
     parent: {
        public_profiles_person_id_fkey: "auth.users";
-       public_profiles_team_id_fkey: "public.teams";
     };
     children: {
 
@@ -728,7 +752,7 @@ interface Tables_relationships {
     children: {
        private_team_codes_team_id_fkey: "private.team_codes";
        public_exercises_team_id_fkey: "public.exercises";
-       public_profiles_team_id_fkey: "public.profiles";
+       public_players_team_id_fkey: "public.players";
        public_programs_team_id_fkey: "public.programs";
        public_scheduled_tasks_team_id_fkey: "public.scheduled_tasks";
        public_task_exercises_team_id_fkey: "public.task_exercises";
@@ -743,6 +767,7 @@ interface Tables_relationships {
     children: {
        identities_user_id_fkey: "auth.identities";
        mfa_factors_user_id_fkey: "auth.mfa_factors";
+       one_time_tokens_user_id_fkey: "auth.one_time_tokens";
        sessions_user_id_fkey: "auth.sessions";
        public_persons_id_fkey: "public.persons";
        public_players_user_id_fkey: "public.players";

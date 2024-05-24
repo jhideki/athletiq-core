@@ -31,13 +31,18 @@ async function registerCoach() {
         email: 'testcoach@email.com',
         password: 'test1234',
     })
-    await seed.persons([{
-        id: data.user?.id,
-    }])
+    if (!data) {
+        console.log("ERROR");
+    }
 
     await seed.teams([{
         coachId: data.user?.id,
         id: teamID,
+        name: 'canucks',
+    }])
+    await seed.profiles([{
+        personId: data.user?.id,
+        userType: 'coach',
     }])
     await supabase.auth.signOut()
 }
@@ -47,31 +52,22 @@ async function registerPlayer() {
         email: 'testPlayer@email.com',
         password: 'test1234',
     })
-    await seed.persons([{
-        id: data.user?.id,
+    await seed.profiles([{
+        personId: data.user?.id,
+        userType: 'player',
     }])
     await seed.players([{
-        teamId: teamID,
         userId: data.user?.id,
-    }])
-
-    //add more dummy players
-    await seed.players((x) => x(10, {
         teamId: teamID,
-    }
-    ))
-
+    }])
     await supabase.auth.signOut()
 }
+
 async function registerUser() {
     const { data, error } = await supabase.auth.signUp({
         email: 'testuser@email.com',
         password: 'test1234',
     })
-
-    await seed.persons([{
-        id: data.user?.id,
-    }])
 
     await supabase.auth.signOut()
 }
@@ -80,4 +76,17 @@ async function registerUser() {
 await registerCoach();
 await registerPlayer();
 await registerUser();
+
+await seed.users((x => x(15, {
+})))
+
+await seed.players((x) => x(15, {
+    teamId: teamID,
+}), {
+    connect: true,
+})
+//add more dummy players
+await seed.profiles((x) => x(15), {
+    connect: true
+})
 // Run it with: DRY=0 npx tsx seed.mts

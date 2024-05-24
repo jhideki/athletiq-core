@@ -224,6 +224,19 @@ type Override = {
       buckets?: string;
     };
   }
+  one_time_tokens?: {
+    name?: string;
+    fields?: {
+      id?: string;
+      user_id?: string;
+      token_type?: string;
+      token_hash?: string;
+      relates_to?: string;
+      created_at?: string;
+      updated_at?: string;
+      users?: string;
+    };
+  }
   organizations?: {
     name?: string;
     fields?: {
@@ -251,7 +264,9 @@ type Override = {
       weight?: string;
       height?: string;
       id?: string;
+      team_id?: string;
       users?: string;
+      teams?: string;
       scheduled_tasks?: string;
       task_players?: string;
     };
@@ -262,9 +277,12 @@ type Override = {
       profile_id?: string;
       person_id?: string;
       user_type?: string;
-      team_id?: string;
+      city?: string;
+      country?: string;
+      first_name?: string;
+      last_name?: string;
+      state?: string;
       users?: string;
-      teams?: string;
     };
   }
   program_tasks?: {
@@ -510,7 +528,7 @@ type Override = {
       organizations?: string;
       team_codes?: string;
       exercises?: string;
-      profiles?: string;
+      players?: string;
       programs?: string;
       scheduled_tasks?: string;
       task_exercises?: string;
@@ -558,6 +576,7 @@ type Override = {
       is_anonymous?: string;
       identities?: string;
       mfa_factors?: string;
+      one_time_tokens?: string;
       sessions?: string;
       persons?: string;
       players?: string;
@@ -680,6 +699,11 @@ export interface Fingerprint {
     metadata?: FingerprintJsonField;
     bucket?: FingerprintRelationField;
   }
+  oneTimeTokens?: {
+    createdAt?: FingerprintDateField;
+    updatedAt?: FingerprintDateField;
+    user?: FingerprintRelationField;
+  }
   organizations?: {
     id?: FingerprintNumberField;
     createdAt?: FingerprintDateField;
@@ -694,15 +718,15 @@ export interface Fingerprint {
     weight?: FingerprintNumberField;
     height?: FingerprintNumberField;
     id?: FingerprintNumberField;
+    teamId?: FingerprintNumberField;
     user?: FingerprintRelationField;
+    team?: FingerprintRelationField;
     scheduledTasks?: FingerprintRelationField;
     taskPlayers?: FingerprintRelationField;
   }
   profiles?: {
     profileId?: FingerprintNumberField;
-    teamId?: FingerprintNumberField;
     person?: FingerprintRelationField;
-    team?: FingerprintRelationField;
   }
   programTasks?: {
     programId?: FingerprintNumberField;
@@ -834,7 +858,7 @@ export interface Fingerprint {
     organization?: FingerprintRelationField;
     teamCodes?: FingerprintRelationField;
     exercises?: FingerprintRelationField;
-    profiles?: FingerprintRelationField;
+    players?: FingerprintRelationField;
     programs?: FingerprintRelationField;
     scheduledTasks?: FingerprintRelationField;
     taskExercises?: FingerprintRelationField;
@@ -861,6 +885,7 @@ export interface Fingerprint {
     deletedAt?: FingerprintDateField;
     identities?: FingerprintRelationField;
     mfaFactors?: FingerprintRelationField;
+    oneTimeTokens?: FingerprintRelationField;
     sessions?: FingerprintRelationField;
     persons?: FingerprintRelationField;
     players?: FingerprintRelationField;
