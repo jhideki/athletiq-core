@@ -119,6 +119,36 @@ export type Database = {
           },
         ]
       }
+      player_profiles: {
+        Row: {
+          player_id: number
+          profile_id: number
+        }
+        Insert: {
+          player_id: number
+          profile_id: number
+        }
+        Update: {
+          player_id?: number
+          profile_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_player_profiles_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_player_profiles_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       players: {
         Row: {
           height: number | null
@@ -163,9 +193,9 @@ export type Database = {
           city: string | null
           country: string | null
           first_name: string | null
+          id: number
           last_name: string | null
           person_id: string
-          profile_id: number
           state: string | null
           user_type: Database["public"]["Enums"]["user_type"] | null
         }
@@ -173,9 +203,9 @@ export type Database = {
           city?: string | null
           country?: string | null
           first_name?: string | null
+          id?: number
           last_name?: string | null
           person_id?: string
-          profile_id?: number
           state?: string | null
           user_type?: Database["public"]["Enums"]["user_type"] | null
         }
@@ -183,9 +213,9 @@ export type Database = {
           city?: string | null
           country?: string | null
           first_name?: string | null
+          id?: number
           last_name?: string | null
           person_id?: string
-          profile_id?: number
           state?: string | null
           user_type?: Database["public"]["Enums"]["user_type"] | null
         }
@@ -236,6 +266,7 @@ export type Database = {
           id: number
           start_date: string
           team_id: number
+          title: string
         }
         Insert: {
           details?: Json | null
@@ -243,6 +274,7 @@ export type Database = {
           id?: number
           start_date: string
           team_id: number
+          title: string
         }
         Update: {
           details?: Json | null
@@ -250,6 +282,7 @@ export type Database = {
           id?: number
           start_date?: string
           team_id?: number
+          title?: string
         }
         Relationships: [
           {
@@ -653,101 +686,6 @@ export type Database = {
           },
         ]
       }
-      s3_multipart_uploads: {
-        Row: {
-          bucket_id: string
-          created_at: string
-          id: string
-          in_progress_size: number
-          key: string
-          owner_id: string | null
-          upload_signature: string
-          version: string
-        }
-        Insert: {
-          bucket_id: string
-          created_at?: string
-          id: string
-          in_progress_size?: number
-          key: string
-          owner_id?: string | null
-          upload_signature: string
-          version: string
-        }
-        Update: {
-          bucket_id?: string
-          created_at?: string
-          id?: string
-          in_progress_size?: number
-          key?: string
-          owner_id?: string | null
-          upload_signature?: string
-          version?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "s3_multipart_uploads_bucket_id_fkey"
-            columns: ["bucket_id"]
-            isOneToOne: false
-            referencedRelation: "buckets"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      s3_multipart_uploads_parts: {
-        Row: {
-          bucket_id: string
-          created_at: string
-          etag: string
-          id: string
-          key: string
-          owner_id: string | null
-          part_number: number
-          size: number
-          upload_id: string
-          version: string
-        }
-        Insert: {
-          bucket_id: string
-          created_at?: string
-          etag: string
-          id?: string
-          key: string
-          owner_id?: string | null
-          part_number: number
-          size?: number
-          upload_id: string
-          version: string
-        }
-        Update: {
-          bucket_id?: string
-          created_at?: string
-          etag?: string
-          id?: string
-          key?: string
-          owner_id?: string | null
-          part_number?: number
-          size?: number
-          upload_id?: string
-          version?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "s3_multipart_uploads_parts_bucket_id_fkey"
-            columns: ["bucket_id"]
-            isOneToOne: false
-            referencedRelation: "buckets"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "s3_multipart_uploads_parts_upload_id_fkey"
-            columns: ["upload_id"]
-            isOneToOne: false
-            referencedRelation: "s3_multipart_uploads"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
     }
     Views: {
       [_ in never]: never
@@ -785,37 +723,6 @@ export type Database = {
         Returns: {
           size: number
           bucket_id: string
-        }[]
-      }
-      list_multipart_uploads_with_delimiter: {
-        Args: {
-          bucket_id: string
-          prefix_param: string
-          delimiter_param: string
-          max_keys?: number
-          next_key_token?: string
-          next_upload_token?: string
-        }
-        Returns: {
-          key: string
-          id: string
-          created_at: string
-        }[]
-      }
-      list_objects_with_delimiter: {
-        Args: {
-          bucket_id: string
-          prefix_param: string
-          delimiter_param: string
-          max_keys?: number
-          start_after?: string
-          next_token?: string
-        }
-        Returns: {
-          name: string
-          id: string
-          metadata: Json
-          updated_at: string
         }[]
       }
       search: {
